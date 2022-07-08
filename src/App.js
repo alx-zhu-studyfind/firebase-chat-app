@@ -9,7 +9,17 @@ import 'firebase/compat/analytics';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-firebase.initializeApp({
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
   apiKey: "AIzaSyAPiZyki8I0VBvJefXywr6hCpu7EGhQPEU",
   authDomain: "fir-chat-app-c6823.firebaseapp.com",
   projectId: "fir-chat-app-c6823",
@@ -17,11 +27,13 @@ firebase.initializeApp({
   messagingSenderId: "93098201427",
   appId: "1:93098201427:web:234e0456818adeae5191a6",
   measurementId: "G-4C1X5WKJZH"
-})
+};
 
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-const analytics = firebase.analytics();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 
 function App() {
@@ -68,7 +80,7 @@ function SignOut() {
 
 function ChatRoom() {
   const dummy = useRef();
-  const messagesRef = firestore.collection('messages');
+  const messagesRef = db.collection('messages');
   const query = messagesRef.orderBy('createdAt').limit(25);
 
   const [messages] = useCollectionData(query, { idField: 'id' });
